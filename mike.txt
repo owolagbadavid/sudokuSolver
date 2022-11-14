@@ -1,0 +1,192 @@
+solve(puzzleString) {
+
+let entries = ['1','2','3','4','5','6','7','8','9']
+  let stuff = this.groupEntries(puzzleString)
+    let solverows = {1:'a',2:'b',3:'c',4:'d',5:'e',6:'f',7:'g',8:'h',9:'i'}
+
+  let array = Object.values(stuff)  
+    array.forEach((item, index)=>{
+
+      item.forEach((item2, index2)=>{
+        let puzz = array.reduce((a,b)=> a.concat(b))
+         let puzzle = puzz.join('')
+        if(item2 =='.'){
+           
+        for (let num = 1; num < 10; num++) {
+ let numS = `${num}`
+          if(this.checkRowPlacement(puzzle, solverows[index+1], `${index2+1}`, numS)&&this.checkColPlacement(puzzle, solverows[index+1], `${index2+1}`, numS)&&this.checkRegionPlacement(puzzle, solverows[index+1], `${index2+1}`, numS)){
+          array[index][index2] =numS;
+           console.log('i', numS)
+            return;
+           
+          }
+          else{
+           // console.log(numS)
+            continue;}
+          
+        }
+        }
+        else{
+          console.log('i', item2)
+          return}
+        
+      })
+    })
+console.log(array)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class SudokuSolver {
+groupEntries(puzzleString){
+  let puzzleGroup={};
+let array = puzzleString.split('');
+  for(let i =1 ;i<=9; i++){
+
+    let group = array.splice( 0, 9)
+    puzzleGroup[i]=group;
+
+  }
+return puzzleGroup;
+}  
+  validate(puzzleString) {
+    if(puzzleString.length==81 && !/[^1-9\.]/.test(puzzleString)){return 'valid puzzle'}
+  if(puzzleString.length!==81){return 'Expected puzzle to be 81 characters long'}
+    if(/[^1-9\.]/.test(puzzleString)){return 'Invalid characters in puzzle'}
+    
+  }
+
+  checkRowPlacement(puzzleString, row, column, value) {
+    row = row.toLowerCase()
+  let stuff = this.groupEntries(puzzleString)
+
+   let rows ={a:1,b:2,c:3,d:4,e:5,f:6,g:7,h:8,i:9}
+    let array = stuff[rows[row]];
+    array[column-1] = value;
+    
+  if (array.indexOf(value)==column-1) {
+    if(array.lastIndexOf(value)==column-1){
+      return true;
+    }
+    else{return false;}
+  }
+    return false;
+
+    
+  }
+
+  checkColPlacement(puzzleString, row, column, value) {
+row = row.toLowerCase()
+  let stuff = this.groupEntries(puzzleString)
+
+   let rows ={a:1,b:2,c:3,d:4,e:5,f:6,g:7,h:8,i:9}
+    let array = stuff[rows[row]];
+    array[column-1] = value;
+    
+
+    for (let i = 1; i < rows[row]; i++) {
+    if(stuff[i][column-1]==value){return false;}  
+    }
+    for(let i = rows[row]+1; i<10;i++){
+      if(stuff[i][column-1]==value){return false;}
+    }
+    return true;
+  }
+
+  checkRegionPlacement(puzzleString, row, column, value) {
+row = row.toLowerCase()
+  let stuff = this.groupEntries(puzzleString)
+    let rows1 ={a:1,b:2,c:3,d:4,e:5,f:6,g:7,h:8,i:9}
+    let array = stuff[rows1[row]];
+    array[column-1] = value;
+    
+
+let rows;
+let cols;
+if(row =='a'||row=='b'||row=='c' ){
+  rows = [1,2,3] 
+}
+   else if(row =='d'||row=='e'||row=='f' ){
+  rows = [4,5,6] 
+}
+   else if(row =='g'||row=='h'||row=='i' ){
+  rows = [7,8,9] 
+}
+    if(column =='1'||column =='2'||column =='3' ){
+  cols = [1,2,3] 
+}
+     else if(column =='4'||column =='5'||column =='6' ){
+  cols = [4,5,6] 
+}
+     else if(column =='7'||column =='8'||column =='9' ){
+  cols = [7,8,9] 
+}
+    console.log(rows, cols)
+    let validity = rows.every(i=>{
+      
+     let condition = cols.every(j=>{
+        if(i==rows1[row]&&j==column){return true;}
+        else{
+          if(stuff[i][j-1]==value){return false;}
+          else{return true;}
+        }
+      })
+      return condition;
+    })
+    return validity;
+  }
+
+  solve(puzzleString) {
+
+let entries = ['1','2','3','4','5','6','7','8','9']
+  let stuff = this.groupEntries(puzzleString)
+    let solverows = {1:'a',2:'b',3:'c',4:'d',5:'e',6:'f',7:'g',8:'h',9:'i'}
+
+  let array = Object.values(stuff)  
+    array.forEach((item, index)=>{
+
+      item.forEach((item2, index2)=>{
+        let puzz = array.reduce((a,b)=> a.concat(b))
+         let puzzle = puzz.join('')
+        if(item2 =='.'){
+           
+        for (let num = 1; num < 10; num++) {
+ let numS = `${num}`
+          if(this.checkRowPlacement(puzzle, solverows[index+1], `${index2+1}`, numS)&&this.checkColPlacement(puzzle, solverows[index+1], `${index2+1}`, numS)&&this.checkRegionPlacement(puzzle, solverows[index+1], `${index2+1}`, numS)){
+          array[index][index2] =numS;
+           console.log('i', numS)
+            return;
+           
+          }
+          else{
+           // console.log(numS)
+            continue;}
+          
+        }
+        }
+        else{
+          console.log('i', item2)
+          return}
+        
+      })
+    })
+console.log(array)
+}
+}
+
+module.exports = SudokuSolver;
+
